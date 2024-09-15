@@ -19,7 +19,7 @@ use syn::{parse_macro_input, AttributeArgs, DataEnum, DeriveInput, Variant};
 ///
 /// ```
 /// enum ExecuteMsg {
-///     ReceiveNft(cw721::Cw721ReceiveMsg)
+///     ReceiveNft(cw721::receiver::Cw721ReceiveMsg)
 /// }
 /// ```
 ///
@@ -54,7 +54,7 @@ pub fn cw721_receive_nft(metadata: TokenStream, input: TokenStream) -> TokenStre
     match &mut ast.data {
         syn::Data::Enum(DataEnum { variants, .. }) => {
             let receive: Variant = syn::parse2(quote! {
-                ReceiveNft (::cw721::Cw721ReceiveMsg)
+                ReceiveNft (::cw721::receiver::Cw721ReceiveMsg)
             })
             .unwrap();
 

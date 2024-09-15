@@ -1,10 +1,10 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{
-    from_json, to_json_binary, DepsMut, Empty, Env, MessageInfo, Reply, Response, StdError,
-    StdResult, SubMsg, WasmMsg,
+    from_json, to_json_binary, DepsMut, Env, MessageInfo, Reply, Response, StdError, StdResult,
+    SubMsg, WasmMsg,
 };
-use cw721::Cw721ReceiveMsg;
-use cw721_base::ExecuteMsg;
+use cw721::receiver::Cw721ReceiveMsg;
+use cw721_base::msg::ExecuteMsg;
 use cw_ics721_outgoing_proxy_derive::cw721_receive_nft;
 use ics721_types::ibc_types::{IbcOutgoingMsg, IbcOutgoingProxyMsg};
 
@@ -40,7 +40,7 @@ pub fn execute_receive_nft(
     };
     let transfer_msg = WasmMsg::Execute {
         contract_addr: info.sender.to_string(), // collection contract
-        msg: to_json_binary(&ExecuteMsg::<Empty, Empty>::TransferNft {
+        msg: to_json_binary(&ExecuteMsg::TransferNft {
             recipient: ics721.to_string(), // ics721
             token_id: token_id.clone(),
         })?,

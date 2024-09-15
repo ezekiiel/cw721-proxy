@@ -5,6 +5,9 @@ authors = ["ekez <ekez@withoutdoing.com>", "mr-t <mr-t@arkprotocol.io>"]
 edition = "2021"
 version = "0.1.0"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
 cosmwasm-std = { workspace = true }
 cosmwasm-schema = { workspace = true }

@@ -4,7 +4,7 @@ use cosmwasm_std::{
     to_json_binary, Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult,
 };
 use cw2::set_contract_version;
-use cw721::Cw721ReceiveMsg;
+use cw721::receiver::Cw721ReceiveMsg;
 
 use cw_ics721_outgoing_proxy::{
     execute_receive_nft as cw721_execute_receive_nft, reply as cw721_reply,

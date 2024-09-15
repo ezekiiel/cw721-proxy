@@ -1,5 +1,5 @@
 use cosmwasm_std::{from_json, to_json_binary, Addr, Empty, IbcTimeout};
-use cw721::Cw721ReceiveMsg;
+use cw721::receiver::Cw721ReceiveMsg;
 use cw_multi_test::{next_block, App, Contract, ContractWrapper, Executor};
 use cw_rate_limiter::{Rate, RateLimitError};
 use ics721_types::ibc_types::{IbcOutgoingMsg, IbcOutgoingProxyMsg};
@@ -51,7 +51,10 @@ impl Test {
         let cw721_instantiate_msg = |id: usize| cw721_base::msg::InstantiateMsg {
             name: format!("cw721 {}", id),
             symbol: format!("{}", id),
-            minter: minter.to_string(),
+            minter: Some(minter.to_string()),
+            collection_info_extension: None,
+            creator: None,
+            withdraw_address: None,
         };
         let cw721s: Vec<_> = (0..cw721s)
             .map(|id| {
@@ -97,7 +100,7 @@ impl Test {
         self.app.execute_contract(
             self.minter.clone(),
             nft.clone(),
-            &cw721_base::msg::ExecuteMsg::<Empty, Empty>::Mint {
+            &cw721_base::msg::ExecuteMsg::Mint {
                 token_id: self.nfts_minted.to_string(),
                 owner: self.minter.to_string(),
                 token_uri: None,
@@ -115,7 +118,7 @@ impl Test {
         self.app.execute_contract(
             self.minter.clone(),
             nft.clone(),
-            &cw721_base::msg::ExecuteMsg::<Empty, Empty>::SendNft {
+            &cw721_base::msg::ExecuteMsg::SendNft {
                 contract: self.rate_limiter.to_string(),
                 token_id: self.nfts_minted.to_string(),
                 msg: to_json_binary(&ibc_msg)?,
